@@ -1,0 +1,89 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string text;
+    int key;
+    string ciphertext;
+    int frequency[256] = {0};
+    
+    cout << "FREQUENCY ANALYSIS" << endl;
+
+    cout << "Enter text: ";
+    getline(cin, text);
+
+    cout << "Enter key: ";
+    cin >> key;
+
+    string encrypted = "";
+    for (int i = 0; i < text.length(); i++) {
+        frequency[(unsigned char)text[i]]++;
+    }
+    cout << "\nFrequency Analysis:\n";
+
+    for (int i = 0; i < 256; i++) {
+        if (frequency[i] > 0) {
+            cout << "'" << (char)i << "' = "
+                 << frequency[i] << endl;
+        }
+    }
+    cout << "Total number of characters we have are: " << text.length() << endl;
+
+
+    for (int i = 0; i < text.length(); i++) {
+
+        char ch = text[i];
+
+        if (ch >= 'A' && ch <= 'Z') {
+
+            int P = ch - 'A';
+            int C = (P + key) % 26;
+
+            encrypted += char(C + 'A');
+        }
+        else if (ch >= 'a' && ch <= 'z') {
+
+            int P = ch - 'a';
+            int C = (P + key) % 26;
+
+            encrypted += char(C + 'a');
+        }
+        else {
+            encrypted += ch;
+        }
+    }
+
+    cout << "\nSo Encrypted text is: " << encrypted << endl;
+    
+    cout << "\nIF YOU WANT TO DECRYPT PLEASE: " << endl;
+
+    cout << "Enter your key: ";
+    cin >> key;
+    cin.ignore();
+
+    cout << "Enter your ciphertext: ";
+    getline(cin, ciphertext);
+
+    string plaintext = "";
+
+    for (int i = 0; i < ciphertext.length(); i++) {
+
+        char ch = ciphertext[i];
+
+        if (ch >= 'A' && ch <= 'Z') {
+
+            int C = ch - 'A';
+            int P = (C - key + 26) % 26;
+
+            plaintext += char(P + 'A');
+        }
+        else {
+            plaintext += ch;
+        }
+    }
+
+    cout << "\nYour Decrypted text is: " << plaintext << endl;
+
+    return 0;
+}
