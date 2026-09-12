@@ -1,0 +1,171 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+int main() {
+
+    string text;
+    int key;
+    string ciphertext;
+
+    // Frequency for 26 letters
+    int frequency[26] = {0};
+
+    cout << "========== FREQUENCY ANALYSIS ==========\n\n";
+
+    cout << "Enter text: ";
+    getline(cin, text);
+
+    // Count letters
+    for (int i = 0; i < text.length(); i++) {
+
+        char ch = text[i];
+
+        // Convert lowercase to uppercase
+        if (ch >= 'a' && ch <= 'z') {
+            ch = ch - 'a' + 'A';
+        }
+
+        // Count only A-Z
+        if (ch >= 'A' && ch <= 'Z') {
+            frequency[ch - 'A']++;
+        }
+    }
+
+    // Count total letters only
+    int totalLetters = 0;
+
+    for (int i = 0; i < 26; i++) {
+        totalLetters += frequency[i];
+    }
+
+    cout << "\n========== ALL 26 LETTERS ==========\n\n";
+
+    cout << left
+         << setw(10) << "Letter"
+         << setw(15) << "Frequency"
+         << setw(15) << "Percentage"
+         << endl;
+
+    cout << "----------------------------------------\n";
+
+    // Display ALL 26 letters
+    for (int i = 0; i < 26; i++) {
+
+        char letter = 'A' + i;
+
+        double percentage = 0;
+
+        if (totalLetters > 0) {
+            percentage = (frequency[i] * 100.0) / totalLetters;
+        }
+
+        cout << left
+             << setw(10) << letter
+             << setw(15) << frequency[i]
+             << fixed << setprecision(2)
+             << percentage << "%"
+             << endl;
+    }
+
+    cout << "----------------------------------------\n";
+
+    cout << "Total number of letters = "
+         << totalLetters << endl;
+
+
+    // ================= ENCRYPTION =================
+
+    cout << "\n========== ENCRYPTION ==========\n";
+
+    cout << "Enter key: ";
+    cin >> key;
+
+    key = key % 26;
+
+    string encrypted = "";
+
+    for (int i = 0; i < text.length(); i++) {
+
+        char ch = text[i];
+
+        if (ch >= 'A' && ch <= 'Z') {
+
+            int P = ch - 'A';
+
+            // C = (P + key) MOD 26
+            int C = (P + key) % 26;
+
+            encrypted += char(C + 'A');
+        }
+
+        else if (ch >= 'a' && ch <= 'z') {
+
+            int P = ch - 'a';
+
+            // C = (P + key) MOD 26
+            int C = (P + key) % 26;
+
+            encrypted += char(C + 'a');
+        }
+
+        else {
+
+            encrypted += ch;
+        }
+    }
+
+    cout << "\nEncrypted text = " << encrypted << endl;
+
+
+    // ================= DECRYPTION =================
+
+    cout << "\n========== DECRYPTION ==========\n";
+
+    cout << "Enter your key: ";
+    cin >> key;
+
+    key = key % 26;
+
+    cin.ignore();
+
+    cout << "Enter your ciphertext: ";
+    getline(cin, ciphertext);
+
+    string plaintext = "";
+
+    for (int i = 0; i < ciphertext.length(); i++) {
+
+        char ch = ciphertext[i];
+
+        if (ch >= 'A' && ch <= 'Z') {
+
+            int C = ch - 'A';
+
+            // P = (C - key + 26) MOD 26
+            int P = (C - key + 26) % 26;
+
+            plaintext += char(P + 'A');
+        }
+
+        else if (ch >= 'a' && ch <= 'z') {
+
+            int C = ch - 'a';
+
+            // P = (C - key + 26) MOD 26
+            int P = (C - key + 26) % 26;
+
+            plaintext += char(P + 'a');
+        }
+
+        else {
+
+            plaintext += ch;
+        }
+    }
+
+    cout << "\nDecrypted text = " << plaintext << endl;
+
+    return 0;
+}
